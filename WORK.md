@@ -7,7 +7,7 @@
 В терминале в папке проекта и установить пакет для автоматической публикации:
 
 ```bash
-cd react-project
+cd vue-project
 npm install --save-dev gh-pages
 ```
 
