@@ -1,0 +1,127 @@
+.color-card {
+  height: 200px;
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  border: 3px solid transparent;
+}
+
+.color-card.locked {
+  border-color: #3b82f6;
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+}
+
+.color-info {
+  padding: 20px;
+  /* background: rgba(255, 255, 255, 0.9); */
+  backdrop-filter: blur(12px);
+  transition: all 0.4s;
+  border-top: 2px solid rgba(255, 255, 255, 0.4);
+  min-height: 100px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.color-value {
+  display: block;
+  font-family: 'Monaco', 'Consolas', 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 12px;
+  text-align: center;
+  user-select: all;
+  word-break: break-all;
+  letter-spacing: 0.5px;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+}
+
+.color-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.lock-btn, .copy-btn {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.lock-btn:hover, .copy-btn:hover {
+  background: white;
+  transform: scale(1.15) translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+
+.lock-btn:active, .copy-btn:active {
+  transform: scale(0.95);
+}
+
+.lock-btn.locked {
+  background: #e70f0f;
+  color: white;
+  box-shadow: 0 4px 15px rgba(25, 2, 2, 0.4);
+}
+
+.lock-btn:hover {
+  background: #e70f0f;
+  box-shadow: 0 6px 20px rgba(25, 2, 2, 0.4);
+}
+
+.copy-btn:hover {
+  background: #10b981;
+  color: white;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+@media (max-width: 768px) {
+  .color-card {
+    height: 180px;
+  }
+  
+  .color-info {
+    padding: 15px;
+  }
+  
+  .color-value {
+    font-size: 13px;
+    padding: 6px;
+  }
+  
+  .lock-btn, .copy-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .color-card {
+    height: 160px;
+  }
+  
+  .color-value {
+    font-size: 12px;
+  }
+}
