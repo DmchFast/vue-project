@@ -1,5 +1,5 @@
 .palette-generator {
-  max-width: 1200px;
+  max-width: 2000px;
   margin: 0 auto;
   padding: 20px;
   font-family: 'Segoe UI', system-ui, sans-serif;
@@ -7,7 +7,7 @@
 
 .header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   padding: 30px;
   background: #667eea;
   color: white;
@@ -27,39 +27,144 @@
   font-size: 1.1rem;
 }
 
-.controls {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 25px;
+/* Навигация по вкладкам */
+.tabs-navigation {
+  display: flex;
+  gap: 10px;
   margin-bottom: 30px;
-  padding: 30px;
+  padding: 0 10px;
+  flex-wrap: wrap;
+}
+
+.tab-button {
+  flex: 1;
+  min-width: 120px;
+  padding: 15px 20px;
+  border: 2px solid #e2e8f0;
+  background: white;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  color: #4a5568;
+  transition: all 0.3s;
+  text-align: center;
+  font-family: inherit;
+}
+
+.tab-button:hover {
+  border-color: #667eea;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
+}
+
+.tab-button.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.25);
+}
+
+.tab-content {
   background: white;
   border-radius: 15px;
+  padding: 30px;
   box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+  margin-bottom: 30px;
+}
+
+/* Стили для вкладки Генератора - 6 ЭЛЕМЕНТОВ В ОДНОЙ ЛИНИИ */
+.controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: nowrap;
+  justify-content: space-between;
 }
 
 .control-group {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
 }
 
 .control-group label {
   font-weight: 600;
   color: #2d3748;
-  font-size: 1rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  margin-bottom: 2px;
+}
+
+/* Группы с разными ширинами */
+.name-group {
+  flex: 1.5;
+  min-width: 140px;
+}
+
+.count-group {
+  flex: 1;
+  min-width: 120px;
+}
+
+.type-group {
+  flex: 1.2;
+  min-width: 130px;
+}
+
+.base-color-group {
+  flex: 1;
+  min-width: 80px; /* Уменьшили минимальную ширину */
+}
+
+.format-group {
+  flex: 1;
+  min-width: 110px;
+}
+
+.buttons-group {
+  flex: 1.8;
+  min-width: 190px;
+  display: flex;
+  flex-direction: row !important;
+  gap: 10px;
+}
+
+.name-input {
+  padding: 12px 14px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  width: 100%;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+
+.name-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
 }
 
 select {
-  padding: 14px 16px;
+  padding: 12px 14px;
   border: 2px solid #e2e8f0;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 14px;
   background: white;
   transition: all 0.3s;
   cursor: pointer;
-  min-width: 140px;
+  width: 100%;
   font-family: inherit;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
 }
 
 select:focus {
@@ -68,22 +173,47 @@ select:focus {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
 }
 
+/* Стили для выбора цвета - ТЕПЕРЬ ПРОСТО input[type="color"] */
+.color-picker-input {
+  width: 100%;
+  height: 44px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 3px;
+  background: white;
+  transition: all 0.3s;
+}
+
+.color-picker-input:hover {
+  border-color: #667eea;
+  transform: translateY(-2px);
+}
+
+.color-picker-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
 .format-buttons {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .format-buttons button {
   flex: 1;
-  padding: 14px 18px;
+  padding: 12px 14px;
   border: 2px solid #e2e8f0;
   background: white;
   border-radius: 10px;
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s;
-  font-size: 15px;
+  font-size: 13px;
   color: #4a5568;
+  min-height: 44px;
+  white-space: nowrap;
 }
 
 .format-buttons button:hover {
@@ -97,29 +227,23 @@ select:focus {
   border-color: #117150;
 }
 
-.control-group.buttons {
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 15px;
-  align-items: flex-end;
-}
-
+/* Кнопки */
 .generate-btn, .save-btn {
-  padding: 16px 24px;
+  flex: 1;
+  padding: 12px 14px;
   border: none;
   border-radius: 10px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   white-space: nowrap;
-  flex: 1;
-  min-width: 160px;
   font-family: inherit;
+  min-height: 44px;
 }
 
 .generate-btn {
@@ -144,6 +268,7 @@ select:focus {
   box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35);
 }
 
+/* Основная палитра */
 .palette-container {
   margin: 30px 0;
 }
@@ -169,11 +294,12 @@ select:focus {
   margin: 30px 0;
 }
 
+/* Предпросмотр */
 .preview-section {
-  background: white;
+  background: #f8fafc;
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 6px 25px rgba(0,0,0,0.08);
+  border: 2px solid #e2e8f0;
   margin-top: 40px;
 }
 
@@ -183,7 +309,6 @@ select:focus {
   font-size: 1.5rem;
 }
 
-/* Обновленные стили для кнопки переключения темы */
 .preview-controls {
   margin-bottom: 25px;
   display: flex;
@@ -235,7 +360,6 @@ select:focus {
   font-weight: 600;
 }
 
-/* Когда тема темная */
 .preview.dark .theme-toggle-btn {
   background: #475569;
   border-color: #64748b;
@@ -312,9 +436,42 @@ select:focus {
   transition: all 0.3s;
 }
 
-@media (max-width: 1024px) {
-  .palette {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+/* Стили для уведомления о сохранении */
+.save-notification {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: #10b981;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+  animation: notificationSlide 0.3s ease-out;
+  z-index: 1001;
+}
+
+@keyframes notificationSlide {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.notification-text {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+@media (max-width: 768px) {
+  .save-notification {
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+    text-align: center;
   }
 }
 
@@ -332,17 +489,31 @@ select:focus {
     font-size: 1rem;
   }
   
-  .controls {
-    grid-template-columns: 1fr;
-    padding: 25px;
-  }
-  
-  .control-group.buttons {
+  .tabs-navigation {
     flex-direction: column;
   }
   
-  .generate-btn, .save-btn {
+  .tab-button {
     width: 100%;
+  }
+  
+  .controls {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .name-group, .count-group, .type-group, .base-color-group, .format-group, .buttons-group {
+    flex: 1 1 100%;
+    width: 100%;
+  }
+  
+  .buttons-group {
+    flex-direction: row;
+    margin-top: 0;
+  }
+  
+  .color-picker-input {
+    height: 50px;
   }
   
   .preview-controls {
@@ -383,5 +554,13 @@ select:focus {
   
   .header h1 {
     font-size: 1.7rem;
+  }
+  
+  .format-buttons {
+    flex-direction: column;
+  }
+  
+  .buttons-group {
+    flex-direction: column;
   }
 }
