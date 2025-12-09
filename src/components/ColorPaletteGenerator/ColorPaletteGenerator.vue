@@ -2,7 +2,7 @@
   <div class="palette-generator">
     <header class="header">
       <h1>🎨 Генератор цветовых палитр</h1>
-    </header>
+</header>
 
     <!-- Навигация по вкладкам -->
     <nav class="tabs-navigation">
@@ -20,11 +20,17 @@
       >
         📊 Анализ
       </button>
+      <button
+        @click="activeTab = 'library'"
+        :class="{ active: activeTab === 'library' }"
+        class="tab-button"
+      >
+        🗃️ Библиотека
+      </button>
     </nav>
 
     <!-- Вкладка Генератор -->
     <div v-if="activeTab === 'generator'" class="tab-content">
-      <!-- Основные контролы - ТЕПЕРЬ 6 ЭЛЕМЕНТОВ В ОДНОЙ ЛИНИИ -->
       <div class="controls">
         <div class="control-group name-group">
           <label for="palette-name">Название палитры:</label>
@@ -57,7 +63,7 @@
           </select>
         </div>
 
-        <!-- БАЗОВЫЙ ЦВЕТ БЕЗ HEX ЗНАЧЕНИЯ -->
+        <!-- БАЗОВЫЙ ЦВЕТ -->
         <div class="control-group base-color-group">
           <label for="base-color">Базовый цвет:</label>
           <input
@@ -87,13 +93,12 @@
           </div>
         </div>
 
-        <!-- Кнопки в одну линию с другими контролами -->
         <div class="control-group buttons-group">
           <button @click="generateRandomPalette" class="generate-btn">
             🎲 Сгенерировать
           </button>
-          <button @click="savePalette" class="save-btn">
-            💾 Сохранить
+          <button @click="openSaveModal" class="save-btn">
+            Сохранить
           </button>
         </div>
       </div>
@@ -155,9 +160,67 @@
       <ColorAnalysis />
     </div>
 
-    <!-- Уведомление о сохранении (скрытое) -->
+    <!-- Вкладка Библиотека -->
+    <div v-else-if="activeTab === 'library'" class="tab-content">
+      <PaletteLibrary 
+        :current-colors="colors" 
+        @palette-loaded="loadPaletteFromLibrary"
+      />
+    </div>
+
+    <!-- Модальное окно сохранения палитры -->
+    <div v-if="showSaveModal" class="save-modal-overlay">
+      <div class="save-modal">
+        <div class="modal-header">
+          <h3>Сохранить палитру</h3>
+          <button @click="closeSaveModal" class="modal-close">×</button>
+        </div>
+        
+        <div class="modal-body">
+          <div class="modal-input-group">
+            <label for="save-palette-name">Название палитры:</label>
+            <input
+              id="save-palette-name"
+              type="text"
+              v-model="savePaletteName"
+              placeholder="Введите название палитры"
+              class="modal-input"
+              @keyup.enter="savePaletteToLibrary"
+            >
+          </div>
+          
+          <div class="modal-preview">
+            <p>Цвета для сохранения:</p>
+            <div class="preview-colors">
+              <div
+                v-for="color in colors"
+                :key="color"
+                class="preview-color"
+                :style="{ backgroundColor: color }"
+                :title="color"
+              ></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button @click="closeSaveModal" class="modal-btn cancel-btn">
+            Отмена
+          </button>
+          <button 
+            @click="savePaletteToLibrary" 
+            class="modal-btn save-modal-btn"
+            :disabled="!savePaletteName.trim() || colors.length === 0"
+          >
+            Сохранить
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Уведомление о сохранении -->
     <div v-if="showSaveNotification" class="save-notification">
-      <span class="notification-text">Палитра сохранена в localStorage!</span>
+      <span class="notification-text">Палитра сохранена!</span>
     </div>
   </div>
 </template>
@@ -165,12 +228,14 @@
 <script>
 import { ref, onMounted, watch } from 'vue'
 import ColorCard from '../ColorCard/ColorCard.vue'
+import PaletteLibrary from '../PaletteLibrary/PaletteLibrary.vue'
 import ColorAnalysis from '../ColorAnalysis/ColorAnalysis.vue'
 
 export default {
   name: 'ColorPaletteGenerator',
   components: {
     ColorCard,
+    PaletteLibrary,
     ColorAnalysis
   },
   setup() {
@@ -185,17 +250,67 @@ export default {
     const baseColor = ref('#667eea') // Базовый цвет
     const activeTab = ref('generator')
     
-    // Уведомление о сохранении
+    // Переменные для модального окна
+    const showSaveModal = ref(false)
+    const savePaletteName = ref('')
     const showSaveNotification = ref(false)
 
-    const savePalette = () => {
-      saveToLocalStorage()
+    const openSaveModal = () => {
+      if (colors.value.length === 0) {
+        return
+      }
+      savePaletteName.value = paletteName.value || `Палитра ${new Date().toLocaleDateString('ru-RU')}`
+      showSaveModal.value = true
+    }
+
+    const closeSaveModal = () => {
+      showSaveModal.value = false
+      savePaletteName.value = ''
+    }
+
+    const savePaletteToLibrary = () => {
+      if (!savePaletteName.value.trim() || colors.value.length === 0) {
+        return
+      }
       
-      // Показываем уведомление
-      showSaveNotification.value = true
-      setTimeout(() => {
-        showSaveNotification.value = false
-      }, 2000)
+      // Загружаем существующие палитры
+      let palettes = []
+      try {
+        const saved = localStorage.getItem('paletteLibrary')
+        if (saved) {
+          palettes = JSON.parse(saved)
+        }
+      } catch (error) {
+        console.error('Ошибка загрузки библиотеки:', error)
+      }
+      
+      const newPalette = {
+        id: Date.now(),
+        name: savePaletteName.value.trim(),
+        colors: [...colors.value],
+        createdAt: new Date().toISOString(),
+        isFavorite: false
+      }
+      
+      palettes.unshift(newPalette)
+      
+      try {
+        localStorage.setItem('paletteLibrary', JSON.stringify(palettes))
+        
+        // Показываем уведомление
+        showSaveNotification.value = true
+        setTimeout(() => {
+          showSaveNotification.value = false
+        }, 2000)
+        
+        closeSaveModal()
+        
+        // Обновляем название палитры в основном поле
+        paletteName.value = savePaletteName.value
+        saveToLocalStorage()
+      } catch (error) {
+        console.error('Ошибка сохранения палитры:', error)
+      }
     }
 
     const hslToHex = (h, s, l) => {
@@ -376,6 +491,13 @@ export default {
       return lockedIndices.value.has(index)
     }
 
+    const loadPaletteFromLibrary = (loadedColors) => {
+      colors.value = [...loadedColors]
+      colorCount.value = loadedColors.length
+      saveToLocalStorage()
+      activeTab.value = 'generator'
+    }
+
     watch(colorCount, (newVal, oldVal) => {
       if (newVal > oldVal) {
         for (let i = oldVal; i < newVal; i++) {
@@ -421,12 +543,17 @@ export default {
       paletteName,
       useDarkBg,
       activeTab,
+      showSaveModal,
+      savePaletteName,
       showSaveNotification,
       generateRandomPalette: generatePaletteByType,
-      savePalette,
+      openSaveModal,
+      closeSaveModal,
+      savePaletteToLibrary,
       copyToClipboard,
       toggleColorLock,
-      isColorLocked
+      isColorLocked,
+      loadPaletteFromLibrary
     }
   }
 }

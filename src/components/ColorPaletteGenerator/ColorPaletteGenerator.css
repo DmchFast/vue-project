@@ -73,7 +73,6 @@
   margin-bottom: 30px;
 }
 
-/* Стили для вкладки Генератора - 6 ЭЛЕМЕНТОВ В ОДНОЙ ЛИНИИ */
 .controls {
   display: flex;
   align-items: flex-end;
@@ -99,7 +98,6 @@
   margin-bottom: 2px;
 }
 
-/* Группы с разными ширинами */
 .name-group {
   flex: 1.5;
   min-width: 140px;
@@ -117,7 +115,7 @@
 
 .base-color-group {
   flex: 1;
-  min-width: 80px; /* Уменьшили минимальную ширину */
+  min-width: 80px;
 }
 
 .format-group {
@@ -173,7 +171,6 @@ select:focus {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
 }
 
-/* Стили для выбора цвета - ТЕПЕРЬ ПРОСТО input[type="color"] */
 .color-picker-input {
   width: 100%;
   height: 44px;
@@ -436,6 +433,182 @@ select:focus {
   transition: all 0.3s;
 }
 
+/* Стили для модального окна сохранения палитры */
+.save-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+  padding: 20px;
+}
+
+.save-modal {
+  background: white;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: modalAppear 0.3s ease-out;
+  overflow: hidden;
+}
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 30px;
+  background: #667eea;
+  color: white;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.modal-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.modal-body {
+  padding: 30px;
+}
+
+.modal-input-group {
+  margin-bottom: 25px;
+}
+
+.modal-input-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 1rem;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+
+.modal-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.modal-preview {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px solid #e2e8f0;
+}
+
+.modal-preview p {
+  margin: 0 0 15px 0;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.preview-colors {
+  display: flex;
+  gap: 10px;
+  height: 40px;
+}
+
+.preview-color {
+  flex: 1;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  min-width: 0;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 15px;
+  padding: 20px 30px;
+  border-top: 2px solid #e2e8f0;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+.cancel-btn {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.cancel-btn:hover {
+  background: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+.save-modal-btn {
+  background: #10b981;
+  color: white;
+}
+
+.save-modal-btn:hover:not(:disabled) {
+  background: #0da271;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.25);
+}
+
+.save-modal-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
 /* Стили для уведомления о сохранении */
 .save-notification {
   position: fixed;
@@ -475,6 +648,87 @@ select:focus {
   }
 }
 
+@media (max-width: 768px) {
+  .save-modal {
+    max-width: 90%;
+  }
+  
+  .modal-header {
+    padding: 20px;
+  }
+  
+  .modal-body {
+    padding: 20px;
+  }
+  
+  .modal-footer {
+    padding: 20px;
+    flex-direction: column;
+  }
+  
+  .modal-btn {
+    width: 100%;
+  }
+}
+
+/* Адаптивность для больших экранов */
+@media (min-width: 1200px) {
+  .controls {
+    gap: 15px;
+  }
+  
+  .control-group label {
+    font-size: 0.9rem;
+  }
+  
+  .name-input, select, .format-buttons button, .generate-btn, .save-btn {
+    padding: 14px 16px;
+    font-size: 15px;
+  }
+  
+  .color-picker-input {
+    height: 48px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .controls {
+    gap: 12px;
+  }
+  
+  .control-group label {
+    font-size: 0.8rem;
+  }
+  
+  .name-input, select, .format-buttons button, .generate-btn, .save-btn {
+    padding: 11px 12px;
+    font-size: 13px;
+  }
+  
+  .color-picker-input {
+    height: 40px;
+  }
+}
+
+/* Адаптивность для планшетов */
+@media (max-width: 900px) {
+  .controls {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .name-group, .count-group, .type-group, .base-color-group, .format-group, .buttons-group {
+    flex: 1 1 calc(33.333% - 15px);
+    min-width: 140px;
+  }
+  
+  .buttons-group {
+    flex: 1 1 100%;
+    margin-top: 10px;
+  }
+}
+
+/* Адаптивность для мобильных */
 @media (max-width: 768px) {
   .palette {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
