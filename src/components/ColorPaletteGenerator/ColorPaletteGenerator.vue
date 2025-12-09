@@ -27,6 +27,13 @@
       >
         🗃️ Библиотека
       </button>
+      <button
+        @click="activeTab = 'export'"
+        :class="{ active: activeTab === 'export' }"
+        class="tab-button"
+      >
+        📤 Экспорт
+      </button>
     </nav>
 
     <!-- Вкладка Генератор -->
@@ -38,7 +45,7 @@
             id="palette-name"
             type="text"
             v-model="paletteName"
-            placeholder="Введите название"
+            placeholder=""
             class="name-input"
           >
         </div>
@@ -168,6 +175,14 @@
       />
     </div>
 
+    <!-- Вкладка Экспорт -->
+    <div v-else-if="activeTab === 'export'" class="tab-content">
+      <ExportPanel 
+        :colors="colors"
+        :palette-name="paletteName"
+      />
+    </div>
+
     <!-- Модальное окно сохранения палитры -->
     <div v-if="showSaveModal" class="save-modal-overlay">
       <div class="save-modal">
@@ -229,6 +244,7 @@
 import { ref, onMounted, watch } from 'vue'
 import ColorCard from '../ColorCard/ColorCard.vue'
 import PaletteLibrary from '../PaletteLibrary/PaletteLibrary.vue'
+import ExportPanel from '../ExportPanel/ExportPanel.vue'
 import ColorAnalysis from '../ColorAnalysis/ColorAnalysis.vue'
 
 export default {
@@ -236,6 +252,7 @@ export default {
   components: {
     ColorCard,
     PaletteLibrary,
+    ExportPanel,
     ColorAnalysis
   },
   setup() {
@@ -297,7 +314,6 @@ export default {
       try {
         localStorage.setItem('paletteLibrary', JSON.stringify(palettes))
         
-        // Показываем уведомление
         showSaveNotification.value = true
         setTimeout(() => {
           showSaveNotification.value = false
@@ -473,6 +489,7 @@ export default {
         }
         
         navigator.clipboard.writeText(textToCopy)
+        // Убрали alert
       } catch (error) {
         console.error('Ошибка копирования:', error)
       }
